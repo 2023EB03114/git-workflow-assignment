@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Case Design - Login System | Assignment Q2</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      padding: 30px 20px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container { max-width: 1400px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .header {
+      border-bottom: 4px solid #667eea;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #667eea;
+      font-size: 32px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .header p {
+      color: #666;
+      font-size: 16px;
+    }
+    .section-title {
+      background: #f0f4ff;
+      padding: 12px 18px;
+      border-left: 5px solid #667eea;
+      margin: 30px 0 20px 0;
+      font-weight: 600;
+      font-size: 20px;
+      color: #333;
+    }
+    .requirements {
+      background: #fef9e7;
+      border: 1px solid #f9e79f;
+      border-left: 5px solid #f39c12;
+      padding: 18px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+    .requirements h3 {
+      color: #f39c12;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .requirements ul {
+      margin-left: 22px;
+    }
+    .requirements li {
+      margin-bottom: 6px;
+      color: #555;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    thead {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+    thead th {
+      padding: 16px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    tbody tr {
+      border-bottom: 1px solid #e8e8e8;
+      transition: background-color 0.2s;
+    }
+    tbody tr:hover {
+      background-color: #f8f9ff;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #fafbfc;
+    }
+    tbody td {
+      padding: 14px 12px;
+      font-size: 13px;
+      vertical-align: top;
+    }
+    tbody td:first-child {
+      font-weight: 600;
+      color: #667eea;
+      width: 90px;
+    }
+    tbody td:nth-child(2) {
+      font-weight: 500;
+      width: 260px;
+    }
+    tbody td:nth-child(3) {
+      font-family: 'Courier New', monospace;
+      background: #f4f4f4;
+      color: #d63384;
+      font-size: 12px;
+      width: 220px;
+    }
+    tbody td:nth-child(4) {
+      color: #555;
+      line-height: 1.7;
+    }
+    code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #c7254e;
+    }
+    .summary {
+      margin-top: 35px;
+      padding: 20px;
+      background: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      border-radius: 6px;
+    }
+    .summary h3 {
+      color: #2e7d32;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    .summary ul {
+      margin-left: 25px;
+    }
+    .summary li {
+      margin-bottom: 8px;
+      color: #424242;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .badge {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>&#128221; Question 2: Test Case Design</h1>
+      <p><strong>Application:</strong> Login System Testing | <strong>Total Test Cases:</strong> <span class="badge">15</span></p>
+    </div>
+
+    <div class="requirements">
+      <h3>&#9888; Functional Requirements</h3>
+      <ul>
+        <li><strong>FR1:</strong> Username must not be empty</li>
+        <li><strong>FR2:</strong> Password must be at least 6 characters long</li>
+        <li><strong>FR3:</strong> Valid username and password allow successful login</li>
+        <li><strong>FR4:</strong> Invalid credentials should display an error message</li>
+        <li><strong>FR5:</strong> After 3 consecutive failed login attempts, the account should be locked</li>
+      </ul>
+    </div>
+
+    <div class="section-title">&#128196; Test Case Table</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Test Case ID</th>
+          <th>Test Scenario</th>
+          <th>Input Data</th>
+          <th>Expected Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TC_01</td>
+          <td>Valid login with correct username and password</td>
+          <td>Username = <code>user1</code><br>Password = <code>pass123</code></td>
+          <td>Login is successful. User is redirected to the dashboard/home page.</td>
+        </tr>
+        <tr>
+          <td>TC_02</td>
+          <td>Login attempt with empty username field</td>
+          <td>Username = <code>(empty)</code><br>Password = <code>pass123</code></td>
+          <td>Login fails. Error message displayed: <em>"Username cannot be empty."</em></td>
+        </tr>
+        <tr>
+          <td>TC_03</td>
+          <td>Login attempt with empty password field</td>
+          <td>Username = <code>user1</code><br>Password = <code>(empty)</code></td>
+          <td>Login fails. Error message displayed: <em>"Password cannot be empty."</em></td>
+        </tr>
+        <tr>
+          <td>TC_04</td>
+          <td>Login attempt with both username and password empty</td>
+          <td>Username = <code>(empty)</code><br>Password = <code>(empty)</code></td>
+          <td>Login fails. Error messages displayed: <em>"Username cannot be empty."</em> and <em>"Password cannot be empty."</em></td>
+        </tr>
+        <tr>
+          <td>TC_05</td>
+          <td>Login attempt with password shorter than 6 characters</td>
+          <td>Username = <code>user1</code><br>Password = <code>abc</code> (3 chars)</td>
+          <td>Login fails. Error message displayed: <em>"Password must be at least 6 characters long."</em></td>
+        </tr>
+        <tr>
+          <td>TC_06</td>
+          <td>Login attempt with password exactly 6 characters (minimum boundary)</td>
+          <td>Username = <code>user1</code><br>Password = <code>pass12</code> (6 chars)</td>
+          <td>Login is successful (if credentials are valid). Password length of 6 is accepted.</td>
+        </tr>
+        <tr>
+          <td>TC_07</td>
+          <td>Login attempt with password exactly 5 characters (below boundary)</td>
+          <td>Username = <code>user1</code><br>Password = <code>pass1</code> (5 chars)</td>
+          <td>Login fails. Error message displayed: <em>"Password must be at least 6 characters long."</em></td>
+        </tr>
+        <tr>
+          <td>TC_08</td>
+          <td>Login attempt with incorrect password (valid format but wrong value)</td>
+          <td>Username = <code>user1</code><br>Password = <code>wrongpass</code></td>
+          <td>Login fails. Error message displayed: <em>"Invalid username or password. Please try again."</em></td>
+        </tr>
+        <tr>
+          <td>TC_09</td>
+          <td>Login attempt with incorrect username (non-existent user)</td>
+          <td>Username = <code>unknownuser</code><br>Password = <code>pass123</code></td>
+          <td>Login fails. Error message displayed: <em>"Invalid username or password. Please try again."</em></td>
+        </tr>
+        <tr>
+          <td>TC_10</td>
+          <td>Account lockout after 3 consecutive failed login attempts</td>
+          <td>Username = <code>user1</code><br>Password = <code>wrongpass</code><br>(entered 3 times consecutively)</td>
+          <td>After 3rd failed attempt, account is locked. Error message displayed: <em>"Your account has been locked due to 3 consecutive failed login attempts. Please contact support."</em> Login button is disabled or further attempts are rejected.</td>
+        </tr>
+        <tr>
+          <td>TC_11</td>
+          <td>Login attempt after account is already locked</td>
+          <td>Username = <code>user1</code><br>Password = <code>pass123</code><br>(correct password, but account is locked)</td>
+          <td>Login fails. Error message displayed: <em>"Your account is locked. Please contact support to unlock it."</em> Login does not proceed even with correct credentials.</td>
+        </tr>
+        <tr>
+          <td>TC_12</td>
+          <td>Login with username containing only spaces (whitespace)</td>
+          <td>Username = <code>   </code> (3 spaces)<br>Password = <code>pass123</code></td>
+          <td>Login fails. Error message displayed: <em>"Username cannot be empty or contain only spaces."</em></td>
+        </tr>
+        <tr>
+          <td>TC_13</td>
+          <td>Login with password containing exactly 6 special characters (boundary + special chars)</td>
+          <td>Username = <code>user1</code><br>Password = <code>@#$%^&</code> (6 special chars)</td>
+          <td>Login fails or succeeds depending on credential match. Password length validation passes (6 chars accepted).</td>
+        </tr>
+        <tr>
+          <td>TC_14</td>
+          <td>Successful login resets failed attempt counter</td>
+          <td>Username = <code>user1</code><br>Password = <code>wrongpass</code> (2 failed attempts), then Password = <code>pass123</code> (correct)</td>
+          <td>Login is successful on the correct attempt. Failed attempt counter resets to 0. Account is not locked.</td>
+        </tr>
+        <tr>
+          <td>TC_15</td>
+          <td>Login with very long username input (stress/boundary test)</td>
+          <td>Username = <code>aaaa...</code> (500 characters)<br>Password = <code>pass123</code></td>
+          <td>Login fails. Error message displayed: <em>"Invalid username or password."</em> System does not crash or hang.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <h3>&#128200; Test Coverage Summary</h3>
+      <ul>
+        <li><strong>FR1 (Username not empty):</strong> Covered by TC_02, TC_04, TC_12</li>
+        <li><strong>FR2 (Password ≥ 6 chars):</strong> Covered by TC_03, TC_05, TC_06, TC_07, TC_13</li>
+        <li><strong>FR3 (Valid login):</strong> Covered by TC_01, TC_06</li>
+        <li><strong>FR4 (Invalid credentials → Error):</strong> Covered by TC_08, TC_09</li>
+        <li><strong>FR5 (3 failed → Lockout):</strong> Covered by TC_10, TC_11, TC_14</li>
+        <li><strong>Edge Cases:</strong> TC_04, TC_05, TC_06, TC_07, TC_12, TC_13, TC_15</li>
+        <li><strong>Boundary Value Analysis (BVA):</strong> Password length tested at 5 (below), 6 (at boundary), and 7+ (above)</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>Software Development Assignment - Question 2: Test Case Design<br>
+      Student ID: 2023EB03114 | Total Test Cases: 15</p>
+    </div>
+  </div>
+</body>
+</html>

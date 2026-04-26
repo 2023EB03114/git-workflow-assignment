@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login System - Assignment 2</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 26px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #555;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: #667eea;
+    }
+    .form-group input.error-input {
+      border-color: #e74c3c;
+    }
+    .field-error {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      margin-top: 8px;
+    }
+    .btn-login:hover:not(:disabled) { opacity: 0.9; }
+    .btn-login:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .message-box {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      text-align: center;
+    }
+    .message-box.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .message-box.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .message-box.warning {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+    .attempt-counter {
+      text-align: center;
+      font-size: 13px;
+      color: #e74c3c;
+      margin-top: 10px;
+      display: none;
+    }
+    .info-box {
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .info-box strong { color: #667eea; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>&#128274; Login System</h2>
+    <p class="subtitle">Software Development Assignment - Q2</p>
+
+    <div class="info-box">
+      <strong>Test Credentials:</strong><br>
+      Username: <code>user1</code> &nbsp;|&nbsp; Password: <code>pass123</code>
+    </div>
+
+    <div class="message-box" id="messageBox"></div>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username">
+      <div class="field-error" id="usernameError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password (min 6 chars)">
+      <div class="field-error" id="passwordError"></div>
+    </div>
+
+    <button class="btn-login" id="loginBtn" onclick="handleLogin()">Login</button>
+    <div class="attempt-counter" id="attemptCounter"></div>
+  </div>
+
+  <script>
+    var failedAttempts = 0;
+    var maxAttempts = 3;
+    var validUsername = 'user1';
+    var validPassword = 'pass123';
+    var isLocked = false;
+
+    function handleLogin() {
+      if (isLocked) {
+        showMessage('Your account is locked. Please contact support to unlock it.', 'error');
+        return;
+      }
+
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+      var usernameInput = document.getElementById('username');
+      var passwordInput = document.getElementById('password');
+      var usernameError = document.getElementById('usernameError');
+      var passwordError = document.getElementById('passwordError');
+
+      // Reset errors
+      usernameInput.classList.remove('error-input');
+      passwordInput.classList.remove('error-input');
+      usernameError.style.display = 'none';
+      passwordError.style.display = 'none';
+      hideMessage();
+
+      var hasError = false;
+
+      // Validate username
+      if (!username || username.trim() === '') {
+        usernameInput.classList.add('error-input');
+        usernameError.textContent = 'Username cannot be empty.';
+        usernameError.style.display = 'block';
+        hasError = true;
+      }
+
+      // Validate password
+      if (!password || password.trim() === '') {
+        passwordInput.classList.add('error-input');
+        passwordError.textContent = 'Password cannot be empty.';
+        passwordError.style.display = 'block';
+        hasError = true;
+      } else if (password.length < 6) {
+        passwordInput.classList.add('error-input');
+        passwordError.textContent = 'Password must be at least 6 characters long.';
+        passwordError.style.display = 'block';
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Check credentials
+      if (username === validUsername && password === validPassword) {
+        failedAttempts = 0;
+        document.getElementById('attemptCounter').style.display = 'none';
+        showMessage('Login successful! Welcome, ' + username + '. Redirecting to dashboard...', 'success');
+        document.getElementById('loginBtn').disabled = true;
+        setTimeout(function() {
+          document.getElementById('loginBtn').disabled = false;
+          document.getElementById('username').value = '';
+          document.getElementById('password').value = '';
+          hideMessage();
+        }, 3000);
+      } else {
+        failedAttempts++;
+        var remaining = maxAttempts - failedAttempts;
+
+        if (failedAttempts >= maxAttempts) {
+          isLocked = true;
+          document.getElementById('loginBtn').disabled = true;
+          document.getElementById('attemptCounter').style.display = 'none';
+          showMessage('Your account has been locked due to ' + maxAttempts + ' consecutive failed login attempts. Please contact support.', 'error');
+        } else {
+          showMessage('Invalid username or password. Please try again.', 'error');
+          var counter = document.getElementById('attemptCounter');
+          counter.textContent = 'Failed attempts: ' + failedAttempts + ' / ' + maxAttempts + '. ' + remaining + ' attempt(s) remaining before lockout.';
+          counter.style.display = 'block';
+        }
+      }
+    }
+
+    function showMessage(msg, type) {
+      var box = document.getElementById('messageBox');
+      box.textContent = msg;
+      box.className = 'message-box ' + type;
+      box.style.display = 'block';
+    }
+
+    function hideMessage() {
+      var box = document.getElementById('messageBox');
+      box.style.display = 'none';
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>
